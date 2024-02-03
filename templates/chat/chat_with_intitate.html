@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Staff</title>
+    <!-- Include Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+
+<body class="bg-gray-100 p-8">
+
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-md shadow-md">
+        <h1 class="text-2xl font-semibold mb-4">Chat with Staff</h1>
+
+        <!-- Chat Form -->
+        <form action="#" method="POST">
+          {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-gray-600 text-sm font-medium mb-2">Your Name</label>
+                <input type="text" id="user_name" name="user_name" class="w-full p-2 border rounded-md">
+            </div>
+            <div class="mb-4">
+              <label for="email" class="block text-gray-600 text-sm font-medium mb-2">Your Email</label>
+              <input type="text" id="user_email" name="user_email" class="w-full p-2 border rounded-md">
+          </div>
+
+            <div class="mb-4">
+                <label for="content" class="block text-gray-600 text-sm font-medium mb-2">Your Message</label>
+                <textarea id="content" name="content" rows="4" class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Start
+                Chat</button>
+        </form>
+    </div>
+
+</body>
+<script>
+  var storedName = localStorage.getItem('user_name');
+  console.log(storedName)
+  var storedEmail = localStorage.getItem('user_email');
+  $('#user_name').val(storedName);
+  $('#user_email').val(storedEmail);
+</script>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Section with Cards -->
+<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+  <!-- Card 1 -->
+  <div class="bg-blue-500 p-6 rounded-lg shadow-md text-white">
+      <h2 class="text-xl font-semibold mb-2">Card 1</h2>
+      <!-- Card content goes here -->
+  </div>
+
+  <!-- Card 2 -->
+  <div class="bg-green-500 p-6 rounded-lg shadow-md text-white">
+      <h2 class="text-xl font-semibold mb-2">Card 2</h2>
+      <!-- Card content goes here -->
+  </div>
+
+  <!-- Card 3 -->
+  <div class="bg-yellow-500 p-6 rounded-lg shadow-md text-white">
+      <h2 class="text-xl font-semibold mb-2">Card 3</h2>
+      <!-- Card content goes here -->
+  </div>
+</div>
+
+<!-- Recent Chats Section -->
+<div class="mt-8">
+  <h2 class="text-2xl font-semibold mb-4">Recent Chats</h2>
+
+  <!-- Display Recent Chats using a for loop -->
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {% for room in rooms %}
+      <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+        <h3 class="text-lg font-semibold mb-2">{{ room.title }}</h3>
+        <p class="text-gray-600">{{ room.user_name }} - {{ room.user_email }}</p>
+        <!-- Additional information or actions can be added here -->
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+{% endblock %}
