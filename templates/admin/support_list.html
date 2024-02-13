@@ -1,54 +1,71 @@
 {% extends 'admin/admin_base.html' %}
 
 {% block title %}
-All Chats
+Support Team
 {% endblock %}
 
 {% block content %}
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css">
-    <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Chats</h3>
+<br>
+<div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+    <div class="flex justify-center flex-1 lg:mr-32">
+        
+    </div>
+   <div class="flex items-center flex-shrink-0 space-x-6">
+<a href="{% url 'add_support_user' %}" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">Add</a></div>  
+</div>
+
+    <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Support Team({{total_users}})</h3>
+   
     <!-- Chat list -->
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
-
+              <thead>
+                <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                  <th class="px-4 py-3">User</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3">Last Login</th>
+                  <th class="px-4 py-3">Actions</th>
+                </tr>
+              </thead>
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    {% for room in rooms reversed %}
-                    
+                    {% for user in all_users reversed %}
                     <tr class="text-gray-700 dark:text-gray-400">
+                      
                         <td class="px-4 py-3">
-                            
+                            <a href="{% url 'update_support_user' user.unique_id %}">
                             <div class="flex items-center text-sm">
                                 <!-- Avatar with inset shadow -->
-                                <!-- <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
                                     <img class="object-cover w-full h-full rounded-full"
-                                        src="flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+                                        src="{{user.profile_pic.url}}"
                                         alt="" loading="lazy">
                                     <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                                </div> -->
+                                </div>
                                 
                                 <div>
-                                    <a href="{% url 'chat_room_reply' room.uid %}">
-                                    <p class="font-semibold">{{room.title|title}}</p>
-                                </a>
-                                    <p class="text-[13px] text-gray-400 font-semibold">
-                                        {% if room.message_set.all%}
-                                        {{room.message_set.all.last.content}}
-                                        {% endif %}
-                                    </p>
+                                    
+                                    <p class="font-semibold">{{user.name|title}}</p>
+                           
                                 </div>
                             
                             </div>
+                          </a>
                             
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                         <td class="px-4 py-3 text-sm">
-                            {% if room.message_set.all%}
-                            {{room.message_set.all.last.timestamp|timesince}}
-                            {% endif %}
+                          {% if user.status == "Active" %}
+                            <p class="font-semibold"><span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Online</span></p>
+                          {% else %}
+                          <p class="font-semibold"><span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">Offline</span></p>
+                          {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <p class="font-semibold">{{user.user.last_login|timesince}}</p>
                         </td>
                     </tr>
                     
@@ -59,14 +76,14 @@ All Chats
         <div
         class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
         <span class="flex items-center col-span-3">
-            Showing {{ room_range_start }}-{{ room_range_end }} of {{ total_rooms }}
+            Showing {{ user_range_start }}-{{ user_range_end }} of {{ total_users }}
         </span>
         <span class="col-span-2"></span>
         <!-- Pagination -->
         <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
             <nav aria-label="Table navigation">
                 <ul class="inline-flex items-center">
-                    {% if rooms.has_previous %}
+                    {% if users.has_previous %}
                     <li>
                         <a href="?page=1"
                             class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
@@ -79,28 +96,28 @@ All Chats
                         </a>
                     </li>
                     <li>
-                        <a href="?page={{ rooms.previous_page_number }}"
+                        <a href="?page={{ users.previous_page_number }}"
                             class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
                             aria-label="Previous">
-                            {{ rooms.previous_page_number }}
+                            {{ users.previous_page_number }}
                         </a>
                     </li>
                     {% endif %}
                     <li>
                         <span class="px-3 py-1 rounded-md bg-purple-600 text-white">
-                            {{ rooms.number }}
+                            {{ users.number }}
                         </span>
                     </li>
-                    {% if rooms.has_next %}
+                    {% if users.has_next %}
                     <li>
-                        <a href="?page={{ rooms.next_page_number }}"
+                        <a href="?page={{ users.next_page_number }}"
                             class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
                             aria-label="Next">
-                            {{ rooms.next_page_number }}
+                            {{ users.next_page_number }}
                         </a>
                     </li>
                     <li>
-                        <a href="?page={{ rooms.paginator.num_pages }}"
+                        <a href="?page={{ users.paginator.num_pages }}"
                             class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
                             aria-label="Last Page">
                             <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">

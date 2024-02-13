@@ -1,125 +1,392 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {% block title %}
-      {% endblock %}
-    </title>
-    <!-- Include Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
-<div class="flex h-screen bg-gray-200">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        <link href="css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static '/css/tailwind.output.css' %}">
+        <script src="{% static '/js/alpine.min.js' %}" defer=""></script>
+        <script src="{% static '/js/init-alpine.js' %}"></script>
+    </head>
 
-    <!-- Left Sidebar -->
-    <div class="w-64 bg-gray-800 text-white p-4">
-        <div class="text-2xl font-semibold mb-4">Admin Dashboard</div>
+    <body>
+        <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+            <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
+                <div class="py-4 text-gray-500 dark:text-gray-400">
+                    <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+                        Admin Dashboard
+                    </a>
+                    <ul class="mt-6">
+                        <li class="relative px-6 py-3">
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                                aria-hidden="true"></span>
+                            <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                                href="{% url 'admin_dashboard' %}">
+                                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" stroke="currentColor">
+                                    <path
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                    </path>
+                                </svg>
+                                <span class="ml-4">Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'faq_page' %}">
+                                <svg fill="#000" height="24px" width="24px" version="1.1" id="Capa_1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 512 512" xml:space="preserve" stroke="currentColor">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M256,0C114.613,0,0,114.617,0,256c0,141.391,114.613,256,256,256s256-114.609,256-256C512,114.617,397.387,0,256,0z M256,384c-17.674,0-32-14.32-32-32c0-17.672,14.326-32,32-32s32,14.328,32,32C288,369.68,273.674,384,256,384z M280.438,251.172 c-5.047,2.078-8.438,7.75-8.438,14.109V272c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16v-6.719 c0-19.453,11.078-36.609,28.219-43.688c14-5.797,21.922-20.391,19.25-35.516c-2.203-12.594-12.953-23.344-25.531-25.547 c-9.75-1.719-19.141,0.766-26.5,6.953C228.172,173.594,224,182.531,224,192c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16 c0-18.953,8.328-36.828,22.859-49.031c14.516-12.188,33.656-17.266,52.609-13.953c25.813,4.531,47,25.719,51.531,51.531 C324.266,210.547,308.422,239.594,280.438,251.172z">
+                                        </path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Faqs</span>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'admin_messages' %}">
+                                <svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#000"
+                                    transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke="#000" stroke-width="0.43200000000000005"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M8 12H8.01M12 12H12.01M16 12H16.01M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                            stroke="#000" stroke-width="1.248" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Messages</span>
+                                <span id="bellCount" data-count="0"
+                                    class="ml-4 inline-flex items-center  px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
+                                    0
+                                </span>
+                                <ul class="absolute right-0 mt-2 space-y-2 " id="notify">
+                                </ul>
+                            </a>
+                        </li>      
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'user_list' %}">
+                                <svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#000"
+                                    transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke="#000" stroke-width="0.43200000000000005"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M8 12H8.01M12 12H12.01M16 12H16.01M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                            stroke="#000" stroke-width="1.248" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Support Team</span>
+                            </a>
+                        </li>              
+                    </ul>
+                    
+                    
+                </div>
+            </aside>
+            <!-- Mobile sidebar -->
+            <!-- Backdrop -->
+            <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+            </div>
+            <aside
+                class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
+                x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+                x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
+                @keydown.escape="closeSideMenu">
+                <div class="py-4 text-gray-500 dark:text-gray-400">
+                    <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+                        Admin Dashboard
+                    </a>
+                    <ul class="mt-6">
+                        <li class="relative px-6 py-3">
+                            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                                aria-hidden="true"></span>
+                            <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                                href="{% url 'admin_dashboard' %}">
+                                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" stroke="currentColor">
+                                    <path
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                    </path>
+                                </svg>
+                                <span class="ml-4">Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'faq_page' %}">
+                                <svg fill="#000" height="24px" width="24px" version="1.1" id="Capa_1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 512 512" xml:space="preserve" stroke="currentColor">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M256,0C114.613,0,0,114.617,0,256c0,141.391,114.613,256,256,256s256-114.609,256-256C512,114.617,397.387,0,256,0z M256,384c-17.674,0-32-14.32-32-32c0-17.672,14.326-32,32-32s32,14.328,32,32C288,369.68,273.674,384,256,384z M280.438,251.172 c-5.047,2.078-8.438,7.75-8.438,14.109V272c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16v-6.719 c0-19.453,11.078-36.609,28.219-43.688c14-5.797,21.922-20.391,19.25-35.516c-2.203-12.594-12.953-23.344-25.531-25.547 c-9.75-1.719-19.141,0.766-26.5,6.953C228.172,173.594,224,182.531,224,192c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16 c0-18.953,8.328-36.828,22.859-49.031c14.516-12.188,33.656-17.266,52.609-13.953c25.813,4.531,47,25.719,51.531,51.531 C324.266,210.547,308.422,239.594,280.438,251.172z">
+                                        </path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Faqs</span>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'admin_messages' %}">
+                                <svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#000"
+                                    transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke="#000" stroke-width="0.43200000000000005"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M8 12H8.01M12 12H12.01M16 12H16.01M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                            stroke="#000" stroke-width="1.248" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Messages</span>
+                                <span id="bellCount" data-count="0"
+                                    class="ml-4 inline-flex items-center  px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-600">
+                                    0
+                                </span>
+                                <ul class="absolute right-0 mt-2 space-y-2 " id="notify">
+                                </ul>
+                            </a>
+                        </li>
+                        <li class="relative px-6 py-3">
+                            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                href="{% url 'user_list' %}">
+                                <svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#000"
+                                    transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke="#000" stroke-width="0.43200000000000005"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M8 12H8.01M12 12H12.01M16 12H16.01M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                            stroke="#000" stroke-width="1.248" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                                <span class="ml-4">Support Team</span>
+                            </a>
+                        </li>                
+                    </ul>
+                </div>
+            </aside>
+            <div class="flex flex-col flex-1 w-full">
+                <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+                    <div
+                        class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+                        <!-- Mobile hamburger -->
+                        <button
+                            class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+                            @click="toggleSideMenu" aria-label="Menu">
+                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <!-- Search input -->
+                        <div class="flex justify-center flex-1 lg:mr-32">
 
-        <!-- Sidebar Menu -->
-        <ul class="space-y-2">
-            <li class="flex items-center">
-                <a href="#" class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <!-- Add your menu icon SVG code here -->
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="flex items-center">
-                <a href="#" class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <!-- Add your menu icon SVG code here -->
-                    </svg>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li class="relative group">
-              <a href="{% url 'admin_messages' %}" class="flex items-center space-x-2">
-                <svg width="40px" height="40px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff" transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#fff" stroke-width="0.43200000000000005"></g><g id="SVGRepo_iconCarrier"> <path d="M8 12H8.01M12 12H12.01M16 12H16.01M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z" stroke="#fff" stroke-width="1.248" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                  <span>Messages</span>
-              </a>
-              <div class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full">
-                  <!-- Your notification count goes here -->
-                  <span id="bellCount" data-count="0">0</span>
-              </div>
-              <ul class="absolute right-0 mt-2 space-y-2 bg-gray-800 text-white p-2 rounded-md" id="notify">
-              </ul>
-          </li>
-        </ul>
-    </div>
+                        </div>
+                        <ul class="flex items-center flex-shrink-0 space-x-6">
 
-    <!-- Main Content -->
-    <div class="flex-1 p-4">
-        {% block content %}
-        {% endblock %}
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+                            <!-- Notifications menu -->
+                            <li class="relative">
+                                <button
+                                    class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
+                                    @click="toggleNotificationsMenu" @keydown.escape="closeNotificationsMenu"
+                                    aria-label="Notifications" aria-haspopup="true">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20">
+                                        <path
+                                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
+                                        </path>
+                                    </svg>
+                                    <!-- Notification badge -->
+                                    <span aria-hidden="true"
+                                        class="absolute top-0 right-0 inline-block w-3 h-3 transform  border-2 border-white rounded-full dark:border-gray-800" id="NotifyBadge"></span>
 
-<script>
-    // setup chat scoket
-    const notifyScoket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/notify/'
-    );
+                                </button>
+                                <template x-if="isNotificationsMenuOpen">
+                                    <ul x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                        @click.away="closeNotificationsMenu" @keydown.escape="closeNotificationsMenu"
+                                        class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:text-gray-300 dark:border-gray-700 dark:bg-gray-700">
+                                        <li class="flex" id="NotifyList">
 
-    // on socket open
-    notifyScoket.onopen = function (e) {
-        console.log('Socket successfully connected.');
-    };
+                                        </li>
+                                    </ul>
+                                </template>
+                            </li>
+                            
+                            <!-- Profile menu -->
+                            <li class="relative">
+                                <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
+                                    @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account"
+                                    aria-haspopup="true">
+                                    <img class="object-cover w-8 h-8 rounded-full"
+                                        src="{{request.user.profile.profile_pic.url}}"
+                                        alt="" aria-hidden="true">
+                                </button>
+                                <template x-if="isProfileMenuOpen">
+                                    <ul x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                        @click.away="closeProfileMenu" @keydown.escape="closeProfileMenu"
+                                        class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+                                        aria-label="submenu">
+                                        <li class="flex">
+                                            <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                                href="#">
+                                                <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    viewbox="0 0 24 24" stroke="currentColor">
+                                                    <path
+                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                                    </path>
+                                                </svg>
+                                                <span>Profile</span>
+                                            </a>
+                                        </li>
+                                        <li class="flex">
+                                            <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                                href="#">
+                                                <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    viewbox="0 0 24 24" stroke="currentColor">
+                                                    <path
+                                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                    </path>
+                                                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                                <span>Settings</span>
+                                            </a>
+                                        </li>
+                                        <li class="flex">
+                                            <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                                href="#">
+                                                <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    viewbox="0 0 24 24" stroke="currentColor">
+                                                    <path
+                                                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                                    </path>
+                                                </svg>
+                                                <span>Log out</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </template>
+                            </li>
+                        </ul>
+                    </div>
+                </header>
+                <main class="h-full overflow-y-auto">
+                    <div class="container px-6 mx-auto grid">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script>
+        // setup chat scoket
+        const notifyScoket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/notify/'
+        );
 
-    // on socket close
-    notifyScoket.onclose = function (e) {
-        console.log('Socket closed unexpectedly');
-    };
+        // on socket open
+        notifyScoket.onopen = function (e) {
+            console.log('Socket successfully connected.');
+        };
 
-    // on receiving message on group
-    notifyScoket.onmessage = function (e) {
-        console.log('Received message:', e.data);
-        const data = JSON.parse(e.data);
-        const message = data.message;
-        // Call the setMessage function to add the new li element
-        setMessage(message);
+        // on socket close
+        notifyScoket.onclose = function (e) {
+            console.log('Socket closed unexpectedly');
+        };
 
-    };
+        // on receiving message on group
+        notifyScoket.onmessage = function (e) {
+            console.log('Received message:', e.data);
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            // Call the setMessage function to add the new li element
+            setMessage(message);
 
-    function setMessage(message) {
-        console.log('Setting message:', message);
-        // Create a new li element
-        var newLi = document.createElement('li');
+        };
 
-        // Create a new anchor element
-        var newAnchor = document.createElement('a');
-        newAnchor.className = 'block px-4 py-2 text-gray-800 hover:bg-gray-200 whitespace-normal';
-        newAnchor.href = '#';
-        newAnchor.textContent = message;
+        function setMessage(message) {
+            console.log('Setting message:', message);
+            // Create a new li element
+            var ulElement = document.getElementById('notify');
+            // getting object of count
+            var countElement = document.getElementById('bellCount');
+            var count = parseInt(countElement.getAttribute('data-count')) || 0;
 
-        // Append the anchor element to the li element
-        newLi.appendChild(newAnchor);
+            // Increment the count
+            count += 1;
 
-        // Get the ul element with the id "notify"
-        var ulElement = document.getElementById('notify');
+            // Set the new count in the data-count attribute and the visible text content
+            countElement.setAttribute('data-count', count);
+            countElement.textContent = count;
+            var notifybdg = document.getElementById('NotifyBadge')
+            notifybdg.className = 'absolute top-0 right-0 inline-block w-3 h-3 transform  border-2 border-white rounded-full dark:border-gray-800 translate-x-1 -translate-y-1 bg-red-600'
+            var newLi = document.getElementById('NotifyList');
 
-        // Append the new li element to the ul element
-        ulElement.appendChild(newLi);
+            // Create a new anchor element
+            var newAnchor = document.createElement('a');
+            newAnchor.className = 'inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200';
+            newAnchor.href = '#';
+            newAnchor.textContent = message;
 
-        // getting object of count
-        var countElement = document.getElementById('bellCount');
-    var count = parseInt(countElement.getAttribute('data-count')) || 0;
+            // Append the anchor element to the li element
+            newLi.appendChild(newAnchor);
+            
 
-    // Increment the count
-    count += 1;
-
-    // Set the new count in the data-count attribute and the visible text content
-    countElement.setAttribute('data-count', count);
-    countElement.textContent = count;
-    }
+            // Get the ul element with the id "notify"
+            
+        }
 
 
-</script>
-</body>
+    </script>
+
 </html>

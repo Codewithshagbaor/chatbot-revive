@@ -1,12 +1,24 @@
 {% extends 'admin/admin_base.html' %}
 
 {% block title %}
-All Chats
+All Faqs
 {% endblock %}
 
 {% block content %}
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css">
-    <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Chats</h3>
+<br>
+<div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+    <div class="flex justify-center flex-1 lg:mr-32">
+        
+    </div>
+   <div class="flex items-center flex-shrink-0 space-x-6">
+<a href="{% url 'add_faq' %}" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">Add </a></div>  
+</div>
+
+    <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Faqs</h3>
+   
     <!-- Chat list -->
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
@@ -14,8 +26,7 @@ All Chats
             <table class="w-full whitespace-no-wrap">
 
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    {% for room in rooms reversed %}
-                    
+                    {% for faq in faqs reversed %}
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
                             
@@ -29,13 +40,11 @@ All Chats
                                 </div> -->
                                 
                                 <div>
-                                    <a href="{% url 'chat_room_reply' room.uid %}">
-                                    <p class="font-semibold">{{room.title|title}}</p>
+                                    <a href="{% url 'update_faq' faq.qid %}">
+                                    <p class="font-semibold">{{faq.question|title}}</p>
                                 </a>
                                     <p class="text-[13px] text-gray-400 font-semibold">
-                                        {% if room.message_set.all%}
-                                        {{room.message_set.all.last.content}}
-                                        {% endif %}
+                                        {{faq.answer|title}}
                                     </p>
                                 </div>
                             
@@ -46,8 +55,8 @@ All Chats
                         <td></td>
                         <td></td>
                         <td class="px-4 py-3 text-sm">
-                            {% if room.message_set.all%}
-                            {{room.message_set.all.last.timestamp|timesince}}
+                            {% if faq.message_set.all%}
+                            {{faq.message_set.all.last.timestamp|timesince}}
                             {% endif %}
                         </td>
                     </tr>
@@ -59,14 +68,14 @@ All Chats
         <div
         class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
         <span class="flex items-center col-span-3">
-            Showing {{ room_range_start }}-{{ room_range_end }} of {{ total_rooms }}
+            Showing {{ faq_range_start }}-{{ faq_range_end }} of {{ total_faqs }}
         </span>
         <span class="col-span-2"></span>
         <!-- Pagination -->
         <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
             <nav aria-label="Table navigation">
                 <ul class="inline-flex items-center">
-                    {% if rooms.has_previous %}
+                    {% if faqs.has_previous %}
                     <li>
                         <a href="?page=1"
                             class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
@@ -79,28 +88,28 @@ All Chats
                         </a>
                     </li>
                     <li>
-                        <a href="?page={{ rooms.previous_page_number }}"
+                        <a href="?page={{ faqs.previous_page_number }}"
                             class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
                             aria-label="Previous">
-                            {{ rooms.previous_page_number }}
+                            {{ faqs.previous_page_number }}
                         </a>
                     </li>
                     {% endif %}
                     <li>
                         <span class="px-3 py-1 rounded-md bg-purple-600 text-white">
-                            {{ rooms.number }}
+                            {{ faqs.number }}
                         </span>
                     </li>
-                    {% if rooms.has_next %}
+                    {% if faqs.has_next %}
                     <li>
-                        <a href="?page={{ rooms.next_page_number }}"
+                        <a href="?page={{ faqs.next_page_number }}"
                             class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
                             aria-label="Next">
-                            {{ rooms.next_page_number }}
+                            {{ faqs.next_page_number }}
                         </a>
                     </li>
                     <li>
-                        <a href="?page={{ rooms.paginator.num_pages }}"
+                        <a href="?page={{ faqs.paginator.num_pages }}"
                             class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
                             aria-label="Last Page">
                             <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">

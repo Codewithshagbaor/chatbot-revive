@@ -1,0 +1,51 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+{{user.name}} Profile{% endblock %}
+
+{% block content %}
+<br>
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div class="p-6 bg-white rounded-md">
+        <h2 class="text-3xl font-semibold mb-4">{{user.name}} Profile
+        </h2>
+
+        <!-- Form -->
+        <form hx-post="{% url 'update_support_user' user.unique_id %}" hx-target="#message" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label for="username" class="block text-gray-700 font-bold mb-2">Username</label>
+              <div class="w-full border border-gray-300 rounded-md px-6 py-2 focus:outline-none focus:border-blue-500">{{user.user.username}}</div>
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+            <div class="w-full border border-gray-300 rounded-md px-6 py-2 focus:outline-none focus:border-blue-500">{{user.user.email}}</div>
+        </div>
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-bold mb-2">Name</label>
+                <input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-md px-6 py-2 focus:outline-none focus:border-blue-500" placeholder="Enter Name" value="{{user.name}}" required>
+            </div>
+            <div class="mb-4">
+              <label for="name" class="block text-gray-700 font-bold mb-2">Status</label>
+              <select name="status" id="status" class="w-full border border-gray-300 rounded-md px-6 py-2 focus:outline-none focus:border-blue-500">
+                {% for s in status %}
+                <option value="{{s.0}}">{{s.1}}</option>
+                {% endfor %}
+              </select>
+          </div>
+            <div class="mb-4">
+                <label for="profile_pic" class="block text-gray-700 font-bold mb-2">Profile Picture</label>
+                <input type="file" class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" name="profile_pic" id="profile_pic">
+            </div>
+            <div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
+            </div>
+        </form>
+        <br>
+        <div id="message"></div>
+
+    </div>
+</div>
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
+{% endblock %}

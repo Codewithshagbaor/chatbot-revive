@@ -38,7 +38,8 @@
                     if (data.previous_messages) {
                         // Display previous messages
                         data.previous_messages.forEach(function (message) {
-                            displayMessage(message.username, message.content);
+                            displayPreviousMessage(message.username, message.content);
+                            console.log(message.username, message.content)
                         });
                     } else {
                         // Display new message
@@ -48,23 +49,7 @@
 
                 function displayMessage(username, content) {
                     var chatDiv = $('#chat-div');
-                    {% if request.user.is_authenticated %}
                     var isCurrentUser = (username === "{{ request.user.username }}");
-                {% else %}
-                    var storedName = localStorage.getItem('user_name');
-                    console.log("Retrieved storedName from localStorage: " + storedName);
-                
-                    // Check if storedName is empty or undefined, and use a default if needed
-                    storedName = storedName || 'Guest';
-                
-                    var isCurrentUser = (username === storedName);
-                    console.log("Comparing with username: " + username);
-                    console.log("Is Current User: " + isCurrentUser);
-                {% endif %}
-                
-
-
-
                     var chatBubbleClass = isCurrentUser ? 'flex items-center justify-start flex-row-reverse' : 'flex flex-row items-center';
                     var chatBubbleHeader = isCurrentUser ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg';
                     var chatBubble = isCurrentUser ? 'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl' : 'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl';
@@ -80,14 +65,32 @@
                     // Scroll to the bottom of the chat section
                     chatDiv.scrollTop(chatDiv[0].scrollHeight);
                 }
+                function displayPreviousMessage(username, content) {
+                    var chatDiv = $('#chat-div');
+                    var isCurrentUser = (username === "{{room.user_name }}");
+                    var chatBubbleClass = isCurrentUser ? 'flex items-center justify-start flex-row-reverse' : 'flex flex-row items-center';
+                    var chatBubbleHeader = isCurrentUser ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg';
+                    var chatBubble = isCurrentUser ? 'relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl' : 'relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl';
 
+                    chatDiv.append('<div class="' + chatBubbleHeader + '">' +
+                        '<div class="' + chatBubbleClass + '">' +
+                        '<div class="' + chatBubble + '">' +
+                        '<div>' + content + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+
+                    // Scroll to the bottom of the chat section
+                    chatDiv.children(":last").scrollTop(chatDiv.children(":last")[0].scrollHeight);
+
+                }
                 // Handle message form submission
                 $('#message-form').submit(function (event) {
                     event.preventDefault();
                     var content = $('#content').val();
                     var username = $('#username').val();
 
-                    socket.send(JSON.stringify({ 'content': content, 'username': username }));
+                    socket.send(JSON.stringify({ 'content': content, 'username':username }));
                     $('#content').val('');
                 });
             });
@@ -113,7 +116,7 @@
                         <input type="text"
                             class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                             name="content" id="content" required>
-                        <input type="hidden" name="username" id="username">
+                            <input type="hidden" name="username" id="username">
                     </div>
                 </div>
                 <div class="ml-4">
@@ -133,18 +136,9 @@
         </div>
 
     </body>
-    {% if request.user.is_authenticated %}
     <script>
-        var user_name = '{{request.user.username}}'
-        $('#username').val(user_name);
-        console.log('Chatting As: ' + user_name)
+    var storedName = localStorage.getItem('user_name');
+    $('#username').val(storedName);
+    console.log('Chatting As: '+storedName)
     </script>
-    {% else %}
-    <script>
-        var storedName = localStorage.getItem('user_name');
-        $('#username').val(storedName);
-        console.log('Chatting As: ' + storedName)
-    </script>
-    {% endif %}
-
 </html>

@@ -6,40 +6,113 @@ Dashboard
 
 {% block content %}
 <!-- Dashboard Section with Cards -->
-<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-  <!-- Card 1 -->
-  <div class="bg-blue-500 p-6 rounded-lg shadow-md text-white">
-      <h2 class="text-xl font-semibold mb-2">Card 1</h2>
-      <!-- Card content goes here -->
+<br>
+<div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+    <!-- Card -->
+    <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+        <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+            <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+          Chats
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            {{room_count}}
+        </p>
+      </div>
+    </div>
+    <!-- Card -->
+    <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+        <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+            <svg fill="#3f83f8" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" stroke="currentColor">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M256,0C114.613,0,0,114.617,0,256c0,141.391,114.613,256,256,256s256-114.609,256-256C512,114.617,397.387,0,256,0z M256,384c-17.674,0-32-14.32-32-32c0-17.672,14.326-32,32-32s32,14.328,32,32C288,369.68,273.674,384,256,384z M280.438,251.172 c-5.047,2.078-8.438,7.75-8.438,14.109V272c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16v-6.719 c0-19.453,11.078-36.609,28.219-43.688c14-5.797,21.922-20.391,19.25-35.516c-2.203-12.594-12.953-23.344-25.531-25.547 c-9.75-1.719-19.141,0.766-26.5,6.953C228.172,173.594,224,182.531,224,192c0,8.844-7.156,16-16,16c-8.844,0-16-7.156-16-16 c0-18.953,8.328-36.828,22.859-49.031c14.516-12.188,33.656-17.266,52.609-13.953c25.813,4.531,47,25.719,51.531,51.531 C324.266,210.547,308.422,239.594,280.438,251.172z">
+                    </path>
+                </g>
+            </svg>
+          </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+            Frequently Asked Questions(Faqs)
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            {{faqs_count}}
+        </p>
+      </div>
+    </div>
+    <!-- Card -->
+    <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+        </svg>
+      </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+            Support Team
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            {{users}}
+        </p>
+      </div>
+    </div>
   </div>
-
-  <!-- Card 2 -->
-  <div class="bg-green-500 p-6 rounded-lg shadow-md text-white">
-      <h2 class="text-xl font-semibold mb-2">Card 2</h2>
-      <!-- Card content goes here -->
-  </div>
-
-  <!-- Card 3 -->
-  <div class="bg-yellow-500 p-6 rounded-lg shadow-md text-white">
-      <h2 class="text-xl font-semibold mb-2">Card 3</h2>
-      <!-- Card content goes here -->
-  </div>
-</div>
-
 <!-- Recent Chats Section -->
-<div class="mt-8">
   <h2 class="text-2xl font-semibold mb-4">Recent Chats</h2>
 
   <!-- Display Recent Chats using a for loop -->
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {% for room in rooms %}
-      <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-        <h3 class="text-lg font-semibold mb-2">{{ room.title }}</h3>
-        <p class="text-gray-600">{{ room.user_name }} - {{ room.user_email }}</p>
-        <!-- Additional information or actions can be added here -->
-      </div>
-    {% endfor %}
-  </div>
+  <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+    <div class="w-full overflow-x-auto">
+        <table class="w-full whitespace-no-wrap">
+
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                {% for room in rooms reversed %}
+                
+                <tr class="text-gray-700 dark:text-gray-400">
+                    <td class="px-4 py-3">
+                        
+                        <div class="flex items-center text-sm">
+                            <!-- Avatar with inset shadow -->
+                            <!-- <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                <img class="object-cover w-full h-full rounded-full"
+                                    src="flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+                                    alt="" loading="lazy">
+                                <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                            </div> -->
+                            
+                            <div>
+                                <a href="{% url 'chat_room_reply' room.uid %}">
+                                <p class="font-semibold">{{room.title|title}}</p>
+                            </a>
+                                <p class="text-[13px] text-gray-400 font-semibold">
+                                    {% if room.message_set.all%}
+                                    {{room.message_set.all.last.content}}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        
+                        </div>
+                        
+                    </td>
+
+                    <td class="px-4 py-3 text-sm">
+                        {% if room.message_set.all%}
+                        {{room.message_set.all.last.timestamp|timesince}}
+                        {% endif %}
+                    </td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 </div>
